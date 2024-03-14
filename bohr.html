@@ -1,0 +1,105 @@
+<!--
+I wrote the code for this website in Microsoft Notepad, Version 6.3. I wrote the HTML, SVG, and JavaScript in Notepad, and then saved the document with the .html file extension and was able to view it in a web browser to see how it was working. I wrote it on a PC running Windows 8. I was able to publish it at Mozilla Thimble, and it is at https://thimbleprojects.org/pigpenpeo/42787/. It was printed on an EPSON ET-2500 Series printer. The webpage shows an animation of a Bohr model of an atom, animated using SVG (Scalable Vector Graphics), and JavaScript working together. This webpage both educates you on atomic structure and demonstrates how SVG and JavaScript can work together to form an interactive animation. Following the code is a printout of what the webpage looks like when rendered in a web browser.
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset = "utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Bohr Model</title>
+    <style>
+      * {
+        font-family: serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bohr Model Atom Drawer</h1>
+    <svg width = "400" height = "400" viewBox = "-50 -50 100 100" id = "svg">
+      <g id = "other">
+        <rect x = "-50" y = "-50" width = "100" height = "100" stroke = "black" fill = "none" stroke-width = "1"/>
+      </g>
+      <g fill = "none" stroke = "black" stroke-linecap = "round" stroke-dasharray = "3,2" stroke-width = "0.5" id = "shells"></g>
+      <g id = "electrons" font-style = "italic" text-anchor = "middle" font-size = "6" stroke = "none"></g>
+    </svg>
+    <p>
+      <label>Atomic Number of Element:
+        <input id = "number" type = "text" size = "3">
+        <button id = "btn" disabled> Draw! </button>
+      </label>
+    </p>
+    <h2>The Bohr Model</h2>
+    <p>The Bohr Model was developed by Niels Bohr in 1913 shortly after the discovery of the atomic nucleus by Ernest Rutherford. Bohr knew that an atom mostly consisted of empty space, with a small, dense, positively charged nucleus. Surrounding this nucleus were electrons, which were negatively charged. Also, he knew that every different element produces distinct emission spectra, an effect that had yet to be explained.</p>
+    <p>Knowing this information, Bohr revised the earlier Rutherford model, as well as other ideas of what the atom looked like, and came up with his own model. In this model, electrons are separated into distinct energy levels, between which electrons do not interact. He also stated that the emission spectra were caused by electrons moving from a lower to a higher energy level, and gaining energy, and then going back to the lower energy level. When all the electrons are in their normal, lowest energy levels, the atom is in its ground state. The ground state of an atom is what is depicted here. When an electron goes back to a lower energy level, it releases energy in the form of a photon, whose energy corresponds to its frequency, and therefore its color, a property which had already been explained by Einstein. He was able to use this model to very accurately predict the emission spectrum of Hydrogen, which caused his model to be immediately accepted.</p>
+    <p>Bohr also used his model to explain many of the chemical properties of the elements in the Periodic table, and why elements in the same column of the Periodic Table have many of the same chemical properties. He described how the first energy level can hold two electrons, and the second can hold 8. Once one energy level gets filled, the next begins to fill. The chemical properties of the element are determined by the number of electrons in the atoms outer shell, or valence electrons. For example, Lithium (3) has one valence electron, which it is trying to get rid of. Fluorine (9) has seven valence electrons, and is looking for an eighth electron to fill its outer electron shell. This causes Lithium and Fluorine to bond together as Lithium Fluoride, or LiF. This also explains why Beryllium and Fluorine will bond to form BeF<sub>2</sub>, and why noble gasses, which have full electron shells, will not readily bond.</p>
+    <p>However, there were several problems with Bohr's model. It showed electrons in different energy levels to not interact with each other, which given that all electrons have a negative charge, would not seem to be the case. Also, it did not correctly predict any emission spectra other than hydrogen's, probably due to this fact. Bohr's pattern of one electron shell filling up before electrons begin to enter the next one broke down after Argon, atomic number 18. You may observe this for yourself in the simulation. Even with the correct number of electrons in each shell, Bohr's model did not account for all of the properties of chemical bonding. These and other problems led his model to be replaced by the quantum model.</p>
+    <p>Though the simulation I have made replicates many of the elements of the Bohr Model, it does fail on some accounts. First, as a note of warning, larger elements will put sufficient strain on your computer, and may cause your browser to freeze or crash. Also, this model is not to scale. The nucleus is in actuality thousands of times smaller than the atom. In addition, electrons orbit the nucleus at nearly the speed of light. Atoms are also always in motion due to heat. Another thing that separates these models from the ones Bohr would have drawn is the presence of neutrons. Neutrons were undiscovered at this time. In this simulation they are always either derived from the rounded average atomic weight in nature, or, for synthetic elements, from the most stable currently known isotope.</p>
+    <p>More information about the Bohr model and electron configurations can be found <a target = "_blank" href = "https://www.khanacademy.org/science/chemistry/electronic-structure-of-atoms">here</a>.</p>
+    <p>Any comments, questions, suggestions or corrections are appreciated.</p>
+    <script>
+      var electrons = [[1],[2],[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,8,1],[2,8,2],[2,8,3],[2,8,4],[2,8,5],[2,8,6],[2,8,7],[2,8,8],[2,8,8,1],[2,8,8,2],[2,8,9,2],[2,8,10,2],[2,8,11,2],[2,8,13,1],[2,8,13,2],[2,8,14,2],[2,8,15,2],[2,8,16,2],[2,8,18,1],[2,8,18,2],[2,8,18,3],[2,8,18,4],[2,8,18,5],[2,8,18,6],[2,8,18,7],[2,8,18,8],[2,8,18,8,1],[2,8,18,8,2],[2,8,18,9,2],[2,8,18,10,2],[2,8,18,12,1],[2,8,18,13,1],[2,8,18,14,1],[2,8,18,15,1],[2,8,18,16,1],[2,8,18,18],[2,8,18,18,1],[2,8,18,18,2],[2,8,18,18,3],[2,8,18,18,4],[2,8,18,18,5],[2,8,18,18,6],[2,8,18,18,7],[2,8,18,18,8],[2,8,18,18,8,1],[2,8,18,18,8,2],[2,8,18,18,9,2],[2,8,18,20,8,2],[2,8,18,21,8,2],[2,8,18,22,8,2],[2,8,18,23,8,2],[2,8,18,24,8,2],[2,8,18,25,8,2],[2,8,18,25,9,2],[2,8,18,27,8,2],[2,8,18,28,8,2],[2,8,18,29,8,2],[2,8,18,30,8,2],[2,8,18,31,8,2],[2,8,18,32,8,2],[2,8,18,32,9,2],[2,8,18,32,10,2],[2,8,18,32,11,2],[2,8,18,32,12,2],[2,8,18,32,13,2],[2,8,18,32,14,2],[2,8,18,32,15,2],[2,8,18,32,17,1],[2,8,18,32,18,1],[2,8,18,32,18,2],[2,8,18,32,18,3],[2,8,18,32,18,4],[2,8,18,32,18,5],[2,8,18,32,18,6],[2,8,18,32,18,7],[2,8,18,32,18,8],[2,8,18,32,18,8,1],[2,8,18,32,18,8,2],[2,8,18,32,18,9,2],[2,8,18,32,18,10,2],[2,8,18,32,20,9,2],[2,8,18,32,21,9,2],[2,8,18,32,23,8,2],[2,8,18,32,24,8,2],[2,8,18,32,25,8,2],[2,8,18,32,25,9,2],[2,8,18,32,27,8,2],[2,8,18,32,28,8,2],[2,8,18,32,29,8,2],[2,8,18,32,30,8,2],[2,8,18,32,31,8,2],[2,8,18,32,32,8,2],[2,8,18,32,32,9,2],[2,8,18,32,32,10,2],[2,8,18,32,32,11,2],[2,8,18,32,32,12,2],[2,8,18,32,32,13,2],[2,8,18,32,32,14,2],[2,8,18,32,32,15,2],[2,8,18,32,32,16,2],[2,8,18,32,32,17,2],[2,8,18,32,32,18,2],[2,8,18,32,32,18,3],[2,8,18,32,32,18,4],[2,8,18,32,32,18,5],[2,8,18,32,32,18,6],[2,8,18,32,32,18,7],[2,8,18,32,32,18,8]];
+      var weights = [1,4,7,9,11,12,14,16,19,20,23,24,27,28,31,32,35,40,39,40,45,48,51,55,56,59,59,64,65,7,0,73,75,79,80,84,85,88,89,91,93,96,98,101,103,106,108,112,115,119,122,128,127,131,133,137,139,140,141,144,145,150,152,157,159,163,165,167,169,173,175,178,181,184,186,190,192,195,197,201,204,207,209,209,210,222,223,226,227,232,231,238,237,244,243,247,247,251,252,257,258,259,262,261,262,266,264,277,268,281,272,285,284,289,288,291,294,294];
+      var symbols = ["H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Uun","Uuu","Uub","Uut","Uuq","Uup","Uuh","Uus","Uuo"];
+
+      var button = document.getElementById("btn");
+      var number = document.getElementById("number");
+      var inputed = function() {
+        if (number.value === "" || isNaN(Number(number.value)) || Number(number.value) < 1 || Number(number.value) !== Math.trunc(Number(number.value)))
+          button.disabled = "disabled";
+        else {
+          button.removeAttribute("disabled");
+        }
+      };
+      number.addEventListener("input", inputed);
+
+      var svg = document.getElementById("svg");
+      var shells = document.getElementById("shells");
+      var eg = document.getElementById("electrons");
+      var other = document.getElementById("other");
+
+      var viewBox = function(a) {
+        svg.viewBox.baseVal.x = -a;
+        svg.viewBox.baseVal.y = -a;
+        svg.viewBox.baseVal.width = a*2;
+        svg.viewBox.baseVal.height = a*2;
+      };
+
+      var p = [];
+      var s = 1;
+      var n = 0;
+      var r = 0;
+
+      var draw = function() {
+        n = Number(number.value);
+        viewBox(50);
+        other.innerHTML = "<rect x = \"-50\" y = \"-50\" width = \"100\" height = \"100\" stroke = \"black\" fill = \"none\" stroke-width = \"1\"/>";
+        shells.innerHTML = "";
+        eg.innerHTML = "";
+        if (n > 118) {
+          other.innerHTML += "<text x= \"0\" y= \"0\" text-anchor = \"middle\" font-size = \"6\">That element is not known to exist.</text>";
+        } else {
+          viewBox((electrons[n-1].length + 3)*10);
+          other.innerHTML = "<rect x = \"" + -(electrons[n-1].length + 3)*10 + "\" y = \"" + -(electrons[n-1].length + 3)*10 + "\" width = \"" + (electrons[n-1].length + 3)*20 + "\" height = \"" + (electrons[n-1].length + 3)*20 + "\" stroke = \"black\" fill = \"none\" stroke-width = \"" + ((electrons[n-1].length + 3)*20)/100 + "\"/>"
+          other.innerHTML += "<circle cy = \"0\" cx = \"0\" r = \"20\" fill = \"none\" stroke = \"black\" stroke-width = \"0.5\"/>";
+          other.innerHTML += "<text x= \"0\" y= \"4\" text-anchor = \"middle\" font-size = \"7\">P = " + n + "</text>";
+          other.innerHTML += "<text x= \"0\" y= \"12\" text-anchor = \"middle\" font-size = \"7\">N = " + (weights[n - 1] - n) + "</text>";
+          other.innerHTML += "<text x= \"0\" y= \"-6\" text-anchor = \"middle\" font-size = \"12\">" + symbols[n-1] + "</text>";
+          for(var i = 0; i < electrons[n-1].length; i++) {
+            r = (i + 3)*10;
+            shells.innerHTML += "<path id = \"shell" + i + "\" d = \"M " + r + ",0 A " + r + " " + r + " 0 1 0 " + -r + ",0 A " + r + " " + r + " 0 1 0 " + r + ",0 z\"/>";
+            p[i] = Math.random();
+            eg.innerHTML += "<g class = \"shell\"></g>"
+          }
+          var shellsE = eg.getElementsByClassName("shell");
+          for(var i = 0; i < electrons[n-1].length; i++) {
+            for(var j = 0; j < electrons[n-1][i]; j++) {
+              shellsE[i].innerHTML += "<g><circle cy = \"0\" cx = \"0\" r = \"3\" fill = \"black\"/><text x= \"0\" y= \"1.3\" fill = \"white\">e</text><animateMotion dur=\"" + (i + 3)*2 + "\" repeatCount=\"indefinite\" keyPoints = \"" + (p[i] + 1/electrons[n-1][i]*j) % 1 + "\;1\;0\;" + (p[i] + 1/electrons[n-1][i]*j) % 1 + "\" keyTimes = \"0\;" + (1 - ((p[i] + 1/electrons[n-1][i]*j) % 1)) + "\;" + (1 - ((p[i] + 1/electrons[n-1][i]*j) % 1)) + "\;1\" calcMode = \"linear\"><mpath href=\"#shell" + i + "\"/></animateMotion></g>";
+            }
+          }
+        }
+      };
+      button.addEventListener("click", draw);
+    </script>
+  </body>
+</html>
