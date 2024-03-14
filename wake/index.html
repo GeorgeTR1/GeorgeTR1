@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Wake Time</title>
+</head>
+
+<body>
+  <h1 align = "center" id = "up">Up: </h1>
+  <h1 align = "center" id = "bed">Bed: </h1>
+  <script src="suncalc.js"></script>
+  <script>
+    var sleepHours = 9;
+    var readyMins = 20;
+    var lat = 44.08971;
+    var lon = -91.34516;
+    var date = new Date();
+    
+    var times = SunCalc.getTimes(date, lat, lon);
+    console.log(times);
+    var dawnSet = times.dawn;
+    var duskSet = times.dusk;
+    
+    //subtract time it takes to get ready
+    dawnSet.setTime(dawnSet.getTime() - readyMins*60*1000);
+
+    //add time it takes to sleep/fall asleep
+    duskSet.setTime(duskSet.getTime() + (sleepHours - 24)*60*60*1000);
+
+    //use later time
+    var time = new Date(Math.max(dawnSet.getTime(), duskSet.getTime()));
+    
+    //round to nearest minute
+    if (time.getSeconds() >= 30) {
+      time.setTime(time.getTime() + 60*1000);
+    }
+
+    function out(time, id) {
+      var out = document.getElementById(id);
+      out.innerHTML += ((time.getHours() - 1)%12 + 1) + ":"
+        + time.getMinutes().toString().padStart(2,"0");
+    }
+
+    out(time, "up");
+    out(new Date(time.getTime() - sleepHours*60*60*1000), "bed");
+  </script>
+</body>
+
+</html>
