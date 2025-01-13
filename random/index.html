@@ -60,30 +60,30 @@
     }
 
     function embed() {
-      var url = "https://corsproxy.io/?" + encodeURIComponent("https://www.reddit.com/oembed?url=" + links[i].trim());
-      
-      embedReq.onload = function() {
-        if (embedReq.status == 200) {
-          var data = JSON.parse(embedReq.response);
-          test.innerHTML += data.html;
-          
-          test.lastElementChild.remove();
-          test.lastElementChild.removeAttribute("style");
-
-          var innerLinks = test.lastElementChild.querySelectorAll("a");
-          for (const node of innerLinks) {
-            node.setAttribute("target","_blank");
-          }
-          i++;
-          
-          if (i < 20) {
-            embed();
-          }
-        }
-      }
-      
+      var url = "https://corsproxy.io/?url=" + encodeURIComponent("https://www.reddit.com/oembed?url=" + links[i].trim());
+    
       embedReq.open("GET", url, true);
       embedReq.send(null);
+    }
+
+    embedReq.onload = function() {
+      if (embedReq.status == 200) {
+        var data = JSON.parse(embedReq.response);
+        test.innerHTML += data.html;
+        
+        test.lastElementChild.remove();
+        test.lastElementChild.removeAttribute("style");
+    
+        var innerLinks = test.lastElementChild.querySelectorAll("a");
+        for (var node of innerLinks) {
+          node.setAttribute("target","_blank");
+        }
+        i++;
+        
+        if (i < 20) {
+          embed();
+        }
+      }
     }
   </script>
 </body>
