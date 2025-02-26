@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Wake Time</title>
+</head>
+
+<body>
+  <div align = "center">
+    <h1>Up: <span id = "up"></span></h1>
+    <h1>Bed: <span id = "bed"></span></h1>
+    <p><label>Lat: <input inputmode = "decimal" id = "lat"></input></label></p>
+    <p><label>Lon: <input inputmode = "decimal" id = "lon"></input></label></p>
+    <p><button disabled id = "calc" type = "button">Calc</button></p>
+  </div>
+  <script src="suncalc.js"></script>
+  <script>
+    if (navigator.userAgent.indexOf("Firefox") == -1) {
+      document.body.innerHTML = "Not Firefox!";
+      throw new Error("Not Firefox");
+    }
+    
+    var sleepHours = 9;
+    var readyMins = 0;
+
+    var latIn = document.getElementById("lat");
+    var lonIn = document.getElementById("lon");
+    var calcButton = document.getElementById("calc");
+
+    var lat = localStorage.getItem("lat");
+    var lon = localStorage.getItem("lon");
+
+    if (lat !== null && lon !== null) {
+      lat = base64ToNum(lat);
+      lon = base64ToNum(lon);
+      latIn.value = lat;
+      lonIn.value = lon;
+      calcButton.disabled = false;
+      calc();
+    }
+
+    latIn.addEventListener("input", checkInput);
+    lonIn.addEventListener("input", checkInput);
+
+    function checkInput() {
+      calcButton.disabled = isNaN(parseFloat(latIn.value)) || isNaN(parseFloat(lonIn.value));
+    }
+
+    calcButton.addEventListener("click", function () {
+      lat = latIn.value;
+      lon = lonIn.value;
+      localStorage.setItem("lat", numToBase64(lat));
+      localStorage.setItem("lon", numToBase64(lon));
+      calc();
+    });
+    
+    function calc() {
+      var date = new Date();
+      
+      var times = SunCalc.getTimes(date, lat, lon);
+      console.log(times);
+      var dawnSet = times.dawn;
+      var duskSet = times.dusk;
+      
+      //subtract time it takes to get ready
+      dawnSet.setTime(dawnSet.getTime() - readyMins*60*1000);
+  
+      //add time it takes to sleep/fall asleep
+      duskSet.setTime(duskSet.getTime() + (sleepHours - 24)*60*60*1000);
+  
+      //use later time
+      var time = new Date(Math.max(dawnSet.getTime(), duskSet.getTime()));
+      
+      //round to nearest minute
+      if (time.getSeconds() >= 30) {
+        time.setTime(time.getTime() + 60*1000);
+      }
+      
+      out(time, "up");
+      out(new Date(time.getTime() - sleepHours*60*60*1000), "bed");
+    }
+    
+    function out(time, id) {
+      var out = document.getElementById(id);
+      out.innerHTML = ((time.getHours() - 1)%12 + 1) + ":"
+        + time.getMinutes().toString().padStart(2,"0");
+    }
+
+    function numToBase64(num) {
+      num = new Float64Array([num]);
+      num = new Uint8Array(num.buffer);
+      var str = "";
+      for (var element of num) {
+        str += String.fromCharCode(element);
+      }
+      return(btoa(str));
+    }
+
+    function base64ToNum(str) {
+      str = atob(str);
+      var num = new Uint8Array(8);
+      for (var i = 0; i < num.length; i++) {
+        num[i] = str.charCodeAt(i);
+      }
+      return new Float64Array(num.buffer)[0];
+    }
+  </script>
+</body>
+
+</html>
