@@ -45,7 +45,8 @@
     lonIn.addEventListener("input", checkInput);
 
     function checkInput() {
-      calcButton.disabled = isNaN(parseFloat(latIn.value)) || isNaN(parseFloat(lonIn.value));
+      // an empty string is 0 when coerced to a number, so that needs to be checked sperately
+      calcButton.disabled = isNaN(latIn.value) || isNaN(lonIn.value) || latIn.value === "" || lonIn.value === "";
     }
 
     calcButton.addEventListener("click", function () {
@@ -100,7 +101,7 @@
 
     function base64ToNum(str) {
       str = atob(str);
-      var num = new Uint8Array(8);
+      var num = new Uint8Array(Float64Array.BYTES_PER_ELEMENT);
       for (var i = 0; i < num.length; i++) {
         num[i] = str.charCodeAt(i);
       }
